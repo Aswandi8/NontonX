@@ -1,26 +1,306 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* ================================
+     BASE
+  ================================= */
+
+  --background: #f7f3e8;
   --foreground: #171717;
+
+  /* ================================
+     CARD
+  ================================= */
+
+  --card: #ffffff;
+  --card-foreground: #171717;
+
+  /* ================================
+     POPOVER
+  ================================= */
+
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+
+  /* ================================
+     PRIMARY
+     KUNING KUNYIT
+  ================================= */
+
+  --primary: #d4a017;
+  --primary-foreground: #171717;
+
+  /* ================================
+     SECONDARY
+  ================================= */
+
+  --secondary: #e8dfc9;
+  --secondary-foreground: #292524;
+
+  /* ================================
+     MUTED
+  ================================= */
+
+  --muted: #ded5bd;
+  --muted-foreground: #57534e;
+
+  /* ================================
+     ACCENT
+  ================================= */
+
+  --accent: #f2e3b5;
+  --accent-foreground: #292524;
+
+  /* ================================
+     DESTRUCTIVE
+  ================================= */
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* ================================
+     BORDER / INPUT
+  ================================= */
+
+  --border: #d4c8aa;
+  --input: #c7b990;
+  --ring: #b8860b;
+
+  /* ================================
+     TYPOGRAPHY
+  ================================= */
+
+  --heading: #111111;
+  --title: #292524;
+  --text: #4b4640;
+  --subtitle: #6b645c;
+  --label: #38332e;
+  --caption: #81796f;
+
+  /* ================================
+     LINK / ACCENT TEXT
+  ================================= */
+
+  --link: #9a7000;
+  --accent-text: #9a7000;
+
+  /* ================================
+     INPUT
+  ================================= */
+
+  --input-background: #ffffff;
+  --input-text: #171717;
+  --input-placeholder: #8a8379;
+  --input-border: #c7b990;
+  --input-focus: #d4a017;
+
+  /* ================================
+     RADIUS
+  ================================= */
+
+  --radius: 0.75rem;
 }
+
+.dark {
+  /* ================================
+     BASE
+  ================================= */
+
+  --background: #080808;
+  --foreground: #ffffff;
+
+  /* ================================
+     CARD
+  ================================= */
+
+  --card: #151515;
+  --card-foreground: #ffffff;
+
+  /* ================================
+     POPOVER
+  ================================= */
+
+  --popover: #181818;
+  --popover-foreground: #ffffff;
+
+  /* ================================
+     PRIMARY
+     KUNING KUNYIT
+  ================================= */
+
+  --primary: #d4a017;
+  --primary-foreground: #080808;
+
+  /* ================================
+     SECONDARY
+  ================================= */
+
+  --secondary: #242424;
+  --secondary-foreground: #f5f5f5;
+
+  /* ================================
+     MUTED
+  ================================= */
+
+  --muted: #303030;
+  --muted-foreground: #b8b8b8;
+
+  /* ================================
+     ACCENT
+  ================================= */
+
+  --accent: #3a321b;
+  --accent-foreground: #ffffff;
+
+  /* ================================
+     DESTRUCTIVE
+  ================================= */
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* ================================
+     BORDER / INPUT
+  ================================= */
+
+  --border: #3a3a3a;
+  --input: #464646;
+  --ring: #d4a017;
+
+  /* ================================
+     TYPOGRAPHY
+  ================================= */
+
+  --heading: #ffffff;
+  --title: #f5f5f5;
+  --text: #c2c2c2;
+  --subtitle: #a6a6a6;
+  --label: #dedede;
+  --caption: #858585;
+
+  /* ================================
+     LINK / ACCENT TEXT
+  ================================= */
+
+  --link: #e0ad20;
+  --accent-text: #e0ad20;
+
+  /* ================================
+     INPUT
+  ================================= */
+
+  --input-background: #1e1e1e;
+  --input-text: #ffffff;
+  --input-placeholder: #858585;
+  --input-border: #464646;
+  --input-focus: #d4a017;
+}
+
+/* ====================================
+   TAILWIND THEME
+==================================== */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-heading: var(--heading);
+  --color-title: var(--title);
+  --color-text: var(--text);
+  --color-subtitle: var(--subtitle);
+  --color-label: var(--label);
+  --color-caption: var(--caption);
+
+  --color-link: var(--link);
+  --color-accent-text: var(--accent-text);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ====================================
+   GLOBAL
+==================================== */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ====================================
+   TEXT SELECTION
+==================================== */
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* ====================================
+   LINKS / BUTTON TAP
+==================================== */
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ====================================
+   SCROLLBAR
+==================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
