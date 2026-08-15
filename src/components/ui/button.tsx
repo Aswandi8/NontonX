@@ -13,6 +13,7 @@ const buttonVariants = cva(
 
         outline:
           "flex items-center justify-center gap-2 border border-border bg-background text-foreground hover:bg-muted hover:border-border transition py-2.5 rounded-lg text-sm",
+
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
 
@@ -23,6 +24,21 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
 
         link: "bg-transparent text-primary underline-offset-4 hover:bg-transparent hover:text-primary/80 hover:underline",
+
+        /*
+         * Icon tanpa tampilan button.
+         *
+         * Digunakan untuk icon interaktif seperti:
+         * - Show / hide password
+         * - Close
+         * - Search
+         * - More actions
+         *
+         * Tetap menggunakan Button agar accessibility
+         * dan keyboard interaction tetap terjaga.
+         */
+        "icon-plain":
+          "rounded-md border-0 bg-transparent p-0 text-muted-foreground shadow-none hover:bg-transparent hover:text-foreground active:translate-y-0 active:scale-100 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-ring/50",
       },
 
       size: {
@@ -61,7 +77,13 @@ function Button({
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({
+          variant,
+          size,
+          className,
+        }),
+      )}
       {...props}
     />
   );

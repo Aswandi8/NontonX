@@ -45,7 +45,7 @@ export default function DashboardHeader({
           )}
 
           <div className="min-w-0">
-            <Heading className="truncate text-lg font-semibold">
+            <Heading className="truncate md:text-2xl font-semibold lg:text-2xl">
               {title}
             </Heading>
 

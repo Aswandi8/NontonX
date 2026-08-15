@@ -1,22 +1,23 @@
-import { Play } from "lucide-react";
-import { Title, Text } from "@/components/typography";
+"use client";
+
+import Image from "next/image";
+import { useTheme } from "@/components/theme/theme-provider";
 
 export default function SidebarLogo() {
-  return (
-    <div className="flex h-16 items-center px-4">
-      <div className="flex min-w-0 items-center gap-3">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-          <Play className="size-4 fill-current" />
-        </div>
+  const { theme } = useTheme();
 
-        <div className="min-w-0">
-          <Title className="truncate text-base font-bold leading-none tracking-tight">
-            NontonX
-          </Title>
-          <Text className="mt-1 truncate text-[10px] leading-none text-muted-foreground">
-            Video Platform
-          </Text>
-        </div>
+  const logo = theme === "dark" ? "/dark-logo.png" : "/light-logo.png";
+
+  return (
+    <div className="flex h-16 items-center justify-center px-4">
+      <div className="relative h-13 w-100">
+        <Image
+          src={logo}
+          alt="NontonX"
+          fill
+          priority
+          className="object-contain object-center"
+        />
       </div>
     </div>
   );

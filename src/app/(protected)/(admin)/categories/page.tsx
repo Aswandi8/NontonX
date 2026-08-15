@@ -1,15 +1,110 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import type { Prisma } from "@/generated/prisma/client";
 
-import DashboardHeader from "@/components/dashboard/header/Header";
+import Header from "@/components/dashboard/header/Header";
+import CategoryTable from "@/components/category/CategoryTable";
 import { Heading, Text } from "@/components/typography";
 import prisma from "@/lib/prisma";
 
-export default async function CategoriesPage() {
+const DEFAULT_LIMIT = 10;
+const ALLOWED_LIMITS = [10, 25, 50, 100] as const;
+
+type SortField = "name" | "slug" | "videos" | "createdAt";
+type SortOrder = "asc" | "desc";
+
+interface CategoriesPageProps {
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    sort?: string;
+    order?: string;
+    limit?: string;
+  }>;
+}
+
+export default async function CategoriesPage({
+  searchParams,
+}: CategoriesPageProps) {
+  const params = await searchParams;
+
+  const search = params.search?.trim() || "";
+
+  const requestedLimit = Number(params.limit);
+
+  const limit = ALLOWED_LIMITS.includes(
+    requestedLimit as (typeof ALLOWED_LIMITS)[number],
+  )
+    ? requestedLimit
+    : DEFAULT_LIMIT;
+
+  const allowedSorts: SortField[] = ["name", "slug", "videos", "createdAt"];
+
+  const validSort: SortField = allowedSorts.includes(params.sort as SortField)
+    ? (params.sort as SortField)
+    : "createdAt";
+
+  const order: SortOrder = params.order === "asc" ? "asc" : "desc";
+
+  const where: Prisma.CategoryWhereInput | undefined = search
+    ? {
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            slug: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      }
+    : undefined;
+
+  const orderBy: Prisma.CategoryOrderByWithRelationInput =
+    validSort === "videos"
+      ? {
+          videos: {
+            _count: order,
+          },
+        }
+      : validSort === "name"
+        ? {
+            name: order,
+          }
+        : validSort === "slug"
+          ? {
+              slug: order,
+            }
+          : {
+              createdAt: order,
+            };
+
+  const total = await prisma.category.count({
+    where,
+  });
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  const requestedPage = Math.max(1, Number(params.page) || 1);
+
+  const page = Math.min(requestedPage, totalPages);
+
   const categories = await prisma.category.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+    where,
+    orderBy,
+    skip: (page - 1) * limit,
+    take: limit,
     include: {
       _count: {
         select: {
@@ -21,13 +116,10 @@ export default async function CategoriesPage() {
 
   return (
     <div className="min-h-screen">
-      <DashboardHeader
-        title="Categories"
-        breadcrumb={["Admin", "Categories"]}
-      />
+      <Header title="Categories" breadcrumb={["Admin", "Categories"]} />
 
-      <div className="mx-auto max-w-[1600px] space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <Heading className="text-xl font-semibold">All Categories</Heading>
 
@@ -37,52 +129,25 @@ export default async function CategoriesPage() {
           </div>
 
           <Link
-            href="/dashboard/categories/create"
+            href="/categories/create"
             className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
           >
             <Plus className="size-4" />
-            Add Category
+            Create Category
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border bg-card">
-          {categories.length === 0 ? (
-            <div className="flex min-h-60 items-center justify-center p-6">
-              <div className="text-center">
-                <Heading className="text-lg font-semibold">
-                  No categories
-                </Heading>
-
-                <Text className="mt-1 text-sm text-muted-foreground">
-                  Start by creating your first category.
-                </Text>
-              </div>
-            </div>
-          ) : (
-            <div className="divide-y divide-border">
-              {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex flex-col gap-3 p-4 transition-colors duration-200 hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="min-w-0">
-                    <Text className="truncate font-medium">
-                      {category.name}
-                    </Text>
-
-                    <Text className="mt-1 text-xs text-muted-foreground">
-                      {category._count.videos} videos
-                    </Text>
-                  </div>
-
-                  <Text className="truncate text-xs text-muted-foreground">
-                    /{category.slug}
-                  </Text>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <CategoryTable
+          categories={categories}
+          total={total}
+          page={page}
+          totalPages={totalPages}
+          limit={limit}
+          search={search}
+          sort={validSort}
+          order={order}
+          allowedLimits={[...ALLOWED_LIMITS]}
+        />
       </div>
     </div>
   );

@@ -49,14 +49,7 @@ export default function SidebarMainMenu({ role }: SidebarMainMenuProps) {
               ]}
             />
 
-            <SidebarMenuItem
-              title="Users"
-              icon={Users}
-              items={[
-                { title: "All Users", href: "/users" },
-                { title: "Add User", href: "/users/create" },
-              ]}
-            />
+            <SidebarMenuItem title="Users" href="/users" icon={Users} />
           </>
         )}
 

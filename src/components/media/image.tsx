@@ -6,6 +6,10 @@ export interface ImageProps extends NextImageProps {
   className?: string;
 }
 
+/* =========================================
+   NORMALIZE SOURCE
+========================================= */
+
 function normalizeSrc(src: ImageProps["src"]) {
   if (typeof src !== "string") {
     return src;
@@ -24,21 +28,14 @@ function normalizeSrc(src: ImageProps["src"]) {
   return `/${src}`;
 }
 
-export function Image({
-  src,
-  className,
-  width = 100,
-  height = 100,
-  loading = "lazy",
-  quality = 75,
-  ...props
-}: ImageProps) {
+/* =========================================
+   IMAGE
+========================================= */
+
+export function Image({ src, className, quality = 75, ...props }: ImageProps) {
   return (
     <NextImage
       src={normalizeSrc(src)}
-      width={width}
-      height={height}
-      loading={loading}
       quality={quality}
       className={cn("object-cover", className)}
       {...props}
